@@ -76,3 +76,27 @@ resource "azurerm_storage_queue" "storage_queues" {
   name                 = each.value.name
   storage_account_name = azurerm_storage_account.storage_account.name
 }
+
+resource "azurerm_cdn_profile" "cdn-profile" {
+  count               = var.enable_cdn_profile ? 1 : 0
+  name                = var.cdn_profile_name
+  resource_group_name = var.resource_group.name
+  location            = var.resource_group.location
+  sku                 = var.cdn_sku
+}
+
+resource "azurerm_cdn_endpoint" "cdn-endpoint" {
+  count                         = var.enable_cdn_profile ? 1 : 0
+  name                          = var.cdn_endpoint_name
+  profile_name                  = azurerm_cdn_profile.cdn-profile.0.name
+  resource_group_name           = var.resource_group.name
+  location                      = var.resource_group.location
+  origin_host_header            = azurerm_storage_account.storage_account.primary_web_host
+  querystring_caching_behaviour = "IgnoreQueryString"
+
+  origin {
+    name      = var.cdn_origin_name
+    host_name = azurerm_storage_account.storage_account.primary_web_host
+  }
+
+}

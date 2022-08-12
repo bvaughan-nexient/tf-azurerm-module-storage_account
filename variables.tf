@@ -125,5 +125,36 @@ variable "blob_container_delete_retention_policy" {
   default     = 0
 }
 
+variable "enable_cdn_profile" {
+  description   = "Choose to enable the CDN configuration"
+  type          = bool
+  default       = false
+}
 
+variable "cdn_profile_name" {
+  description   = "Specify a name for the CDN profile"
+  type          = string
+  default       = null
+  # TODO: validate profile name format
+}
 
+variable "cdn_endpoint_name" {
+  description = "Specify the leftmost hostname for the CDN endpoint: <<cnd_endpoint_name>>.azureedge.net"
+  type        = string
+  default     = null
+}
+
+variable "cdn_origin_name" {
+  description   = "Specify a human-friendly name for the CDN origin"
+  type          = string
+  default       = "cdnorigin"
+}
+
+variable "cdn_sku" {
+  description   = "Specify the CDN SKU (Verizon, Akamai, Microsoft, etc.)."
+  # {Custom_Verizon, Premium_Verizon, StandardPlus_955BandWidth_ChinaCdn, 
+  #   StandardPlus_AvgBandWidth_ChinaCdn, StandardPlus_ChinaCdn, Standard_955BandWidth_ChinaCdn, 
+  #   Standard_Akamai, Standard_AvgBandWidth_ChinaCdn, Standard_ChinaCdn, Standard_Microsoft, Standard_Verizon}
+  type          = string
+  default       = "Standard_Microsoft"
+}
